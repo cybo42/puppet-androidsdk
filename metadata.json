@@ -1,0 +1,14 @@
+{
+  "name": "cybo42-androidsdk",
+  "version": "0.1.0",
+  "author": "cybo42",
+  "summary": "Install and manage Android SDK",
+  "license": "Apache 2.0",
+  "source": "https://github.com/cybo42/puppet-androidsdk",
+  "project_page": "https://github.com/cybo42/puppet-androidsdk",
+  "issues_url": "https://github.com/cybo42/puppet-androidsdk/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ]
+}
+
