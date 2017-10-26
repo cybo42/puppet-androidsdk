@@ -37,6 +37,7 @@
 #
 class androidsdk {
 
+  class{'::androidsdk::install': }
 
 
 }
