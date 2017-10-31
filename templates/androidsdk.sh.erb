@@ -3,8 +3,8 @@
 # This file is managed by Puppet do NOT modify
 #---------------------------------------------------
 
-ANDROID_HOME=<%= androidsdk_home %>
+ANDROID_HOME=<%= @androidsdk_home %>
 export ANDROID_HOME
 
-PATH=$ANDROID_HOME/tools/bin:$PATH
+PATH=${ANDROID_HOME}/tools/bin:$PATH
 export PATH

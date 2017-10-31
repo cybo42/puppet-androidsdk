@@ -1,7 +1,8 @@
 #
 class androidsdk::install{
 
-  $android_user = 'android'
+  $android_user  = 'android'
+  $android_group = 'android'
 
   $androidsdk_source='https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip'
   $androidsdk_home='/usr/local/androidsdk'
@@ -20,10 +21,16 @@ class androidsdk::install{
   #   # group  => $android::group,
   # } ->
 
+  package {'unzip':
+    ensure => 'present'
+  } ->
+
   staging::deploy { 'sdk-tools-linux-3859397.zip':
     source  => $androidsdk_source,
     target  => $androidsdk_home,
-    creates => "${androidsdk_home}/tools"
+    creates => "${androidsdk_home}/tools",
+    user    => $android_user,
+    group   => $android_group,
   }
 
   file { '/etc/profile.d/androidsdk.sh':
