@@ -35,9 +35,33 @@
 #
 # Copyright 2017 Your name here, unless otherwise noted.
 #
-class androidsdk {
+class androidsdk(
+  $install_packages = []
+) {
 
   class{'::androidsdk::install': }
+
+  if ! empty($install_packages) {
+
+    file {'/usr/local/androidsdk/package_install.lst':
+      ensure  => 'present',
+      content => template('androidsdk/package_install_file.erb'),
+    } ->
+    file {'/usr/local/androidsdk/package_install.sh':
+      ensure  => 'present',
+      content => 'yes y| /usr/local/androidsdk/tools/bin/sdkmanager --verbose --package_file=/usr/local/androidsdk/package_install.lst',
+      mode    => '0755',
+    } ->
+    exec { 'install-from-file':
+      cwd     => '/usr/local/androidsdk',
+      command => 'bash -c /usr/local/androidsdk/package_install.sh',
+      path    => ['/usr/bin','/usr/local/bin','/usr/local/androidsdk','/usr/local/androidsdk/tools/bin/'],
+    }
+
+
+
+  }
+
 
 
 }
