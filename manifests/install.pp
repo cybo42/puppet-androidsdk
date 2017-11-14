@@ -1,18 +1,25 @@
 #
-class androidsdk::install{
+class androidsdk::install(
+  $androidsdk_home,
+){
 
   $android_user  = 'android'
   $android_group = 'android'
 
   $androidsdk_source='https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip'
-  $androidsdk_home='/usr/local/androidsdk'
 
   user { $android_user:
     ensure     => 'present',
     comment    => 'Android SDK user account',
     home       => $androidsdk_home,
-    managehome => true,
+    managehome => false,
     system     => true,
+  }
+
+  file {'android_sdk_home':
+    ensure => 'directory',
+    path   => $androidsdk_home,
+    owner  => $android_user,
   }
 
   # file {'/usr/local/androidsdk':

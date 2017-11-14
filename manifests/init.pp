@@ -36,26 +36,34 @@
 # Copyright 2017 Your name here, unless otherwise noted.
 #
 class androidsdk(
-  $install_packages = []
+  $android_sdk_home = '/usr/local/androidsdk',
+  $install_packages = [],
 ) {
 
-  class{'::androidsdk::install': }
+  class{'::androidsdk::install':
+    androidsdk_home => $android_sdk_home,
+  }
 
   if ! empty($install_packages) {
+    $package_file = "${android_sdk_home}/package_install.lst"
+    $package_file_script = "${android_sdk_home}/package_install.sh"
 
-    file {'/usr/local/androidsdk/package_install.lst':
+    file {'package_file':
       ensure  => 'present',
+      path    => $package_file,
       content => template('androidsdk/package_install_file.erb'),
+      require => [Class['::androidsdk::install']],
     } ->
-    file {'/usr/local/androidsdk/package_install.sh':
+    file {'package_file_script':
       ensure  => 'present',
-      content => 'yes y| /usr/local/androidsdk/tools/bin/sdkmanager --verbose --package_file=/usr/local/androidsdk/package_install.lst',
+      path    => $package_file_script,
+      content => "yes y| ${android_sdk_home}/tools/bin/sdkmanager --verbose --package_file=${package_file}",
       mode    => '0755',
     } ->
     exec { 'install-from-file':
-      cwd     => '/usr/local/androidsdk',
-      command => 'bash -c /usr/local/androidsdk/package_install.sh',
-      path    => ['/usr/bin','/usr/local/bin','/usr/local/androidsdk','/usr/local/androidsdk/tools/bin/'],
+      cwd     => $android_sdk_home,
+      command => "bash -c ${package_file_script}",
+      path    => ['/usr/bin','/usr/local/bin',"${android_sdk_home}","${android_sdk_home}/tools/bin"]
     }
 
 
