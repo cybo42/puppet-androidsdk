@@ -63,13 +63,8 @@ class androidsdk(
     exec { 'install-from-file':
       cwd     => $android_sdk_home,
       command => "bash -c ${package_file_script}",
-      path    => ['/usr/bin','/usr/local/bin',"${android_sdk_home}","${android_sdk_home}/tools/bin"]
+      path    => ['/usr/bin','/usr/local/bin',$android_sdk_home,"${android_sdk_home}/tools/bin"]
     }
 
-
-
   }
-
-
-
 }
