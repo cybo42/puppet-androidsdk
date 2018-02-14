@@ -1,7 +1,7 @@
 #
 class androidsdk::install(
   $androidsdk_home,
-){
+) inherits androidsdk::params{
 
   $android_user  = 'android'
   $android_group = 'android'
