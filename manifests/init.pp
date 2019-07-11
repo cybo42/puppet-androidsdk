@@ -39,10 +39,14 @@ class androidsdk(
   $android_sdk_home   = '/usr/local/androidsdk',
   $install_packages   = [],
   $uninstall_packages = [],
+  $sdk_user           = undef,
+  $sdk_group          = undef,
 ) {
 
   class{'::androidsdk::install':
     androidsdk_home => $android_sdk_home,
+    android_user = $sdk_user,
+    android_group = $sdk_group,
   }
 
   if ! empty($uninstall_packages) {

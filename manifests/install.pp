@@ -1,10 +1,9 @@
 #
 class androidsdk::install(
   $androidsdk_home,
+  $android_user  = 'android',
+  $android_group = 'android',
 ) inherits androidsdk::params{
-
-  $android_user  = 'android'
-  $android_group = 'android'
 
   $androidsdk_source='https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip'
 
@@ -38,6 +37,7 @@ class androidsdk::install(
     path    => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
     cwd     => $androidsdk_home,
   }
+
 
   file { '/etc/profile.d/androidsdk.sh':
     ensure  => 'file',
