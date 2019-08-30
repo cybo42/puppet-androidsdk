@@ -45,8 +45,8 @@ class androidsdk(
 
   class{'::androidsdk::install':
     androidsdk_home => $android_sdk_home,
-    android_user = $sdk_user,
-    android_group = $sdk_group,
+    android_user    => $sdk_user,
+    android_group   => $sdk_group,
   }
 
   if ! empty($uninstall_packages) {
@@ -56,21 +56,25 @@ class androidsdk(
     file {'uninstall_package_file':
       ensure  => 'present',
       path    => $uninstall_package_file,
+      owner   => $sdk_user,
+      group   => $sdk_group,
       content => template('androidsdk/package_uninstall_file.erb'),
       require => [Class['::androidsdk::install']],
     } ->
     file {'uninstall_package_file_script':
       ensure  => 'present',
       path    => $uninstall_package_file_script,
+      owner   => $sdk_user,
+      group   => $sdk_group,
       content => "yes y| ${android_sdk_home}/tools/bin/sdkmanager --verbose --uninstall --package_file=${uninstall_package_file}",
       mode    => '0755',
     } ->
     exec { 'uninstall-from-file':
       cwd     => $android_sdk_home,
+      user    => $sdk_user,
       command => "bash -c ${uninstall_package_file_script}",
       path    => ['/usr/bin','/usr/local/bin',$android_sdk_home,"${android_sdk_home}/tools/bin"]
     }
-
   }
 
   if ! empty($install_packages) {
@@ -80,18 +84,23 @@ class androidsdk(
     file {'package_file':
       ensure  => 'present',
       path    => $package_file,
+      owner   => $sdk_user,
+      group   => $sdk_group,
       content => template('androidsdk/package_install_file.erb'),
       require => [Class['::androidsdk::install']],
     } ->
     file {'package_file_script':
       ensure  => 'present',
       path    => $package_file_script,
+      owner   => $sdk_user,
+      group   => $sdk_group,
       content => "yes y| ${android_sdk_home}/tools/bin/sdkmanager --verbose --package_file=${package_file}",
       mode    => '0755',
     } ->
     exec { 'install-from-file':
       cwd     => $android_sdk_home,
       command => "bash -c ${package_file_script}",
+      user    => $sdk_user,
       path    => ['/usr/bin','/usr/local/bin',$android_sdk_home,"${android_sdk_home}/tools/bin"]
     }
 
